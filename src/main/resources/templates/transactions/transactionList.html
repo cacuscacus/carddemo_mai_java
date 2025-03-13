@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Transaction List</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            margin: 0;
+            background: #f5f5f5;
+            color: #424242;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 32px auto;
+            padding: 0 16px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-top: 24px;
+        }
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        h1 {
+            color: #1a237e;
+            margin: 0;
+            font-weight: 500;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            color: #616161;
+            font-size: 0.9em;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .data-id {
+            font-weight: 500;
+            color: #1a237e;
+        }
+        .search-form {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .search-form input {
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 1em;
+            min-width: 300px;
+        }
+        .search-form button {
+            padding: 12px 24px;
+            background: #3949ab;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-form button:hover {
+            opacity: 0.9;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+        .data-table th,
+        .data-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .data-table th {
+            background: #f5f5f5;
+            color: #616161;
+            font-weight: 500;
+        }
+        .data-table tr:hover {
+            background: #fafafa;
+        }
+        .action-link {
+            color: #3949ab;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .action-link:hover {
+            text-decoration: underline;
+        }
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 24px 0;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .pagination-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .pagination a {
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #3949ab;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .pagination a:hover {
+            background: #f5f5f5;
+        }
+        .pagination span {
+            padding: 8px 16px;
+            color: #616161;
+        }
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        .quick-actions a {
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #3949ab;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .quick-actions a:hover {
+            background: #f5f5f5;
+        }
+        .error-message {
+            background: #ffebee;
+            color: #d32f2f;
+            padding: 16px;
+            border-radius: 4px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div>
+                <span class="data-id" th:text="'Prog: ' + ${programName}"></span>
+                <span th:text="'Date: ' + ${currentDate}"></span>
+                <span th:text="'Time: ' + ${currentTime}"></span>
+            </div>
+            <div>
+                <span class="data-id" th:text="'Tran: ' + ${transactionName}"></span>
+                <span th:text="${title01}"></span>
+                <span th:text="${title02}"></span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header-section">
+                <h1>Transaction List</h1>
+                <div>
+                    <span class="data-id">Page: <span th:text="${currentPage + 1}"></span></span>
+                </div>
+            </div>
+
+            <form class="search-form" th:action="@{/transactions}" method="get">
+                <label>Search Transaction ID:</label>
+                <input type="text" name="tranId" th:value="${tranId}" placeholder="Enter transaction ID">
+                <button type="submit">
+                    <i class="material-icons">search</i>
+                    Search
+                </button>
+            </form>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Transaction ID</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="transaction, iterStat : ${transactions}">
+                        <td>
+                            <a class="action-link" th:href="@{/transactions/{id}(id=${transaction.id})}">
+                                <i class="material-icons">visibility</i>
+                                View
+                            </a>
+                        </td>
+                        <td th:text="${transaction.id}"></td>
+                        <td th:text="${#temporals.format(transaction.originalTimestamp, 'MM/dd/yy')}"></td>
+                        <td th:text="${transaction.description}"></td>
+                        <td th:text="${transaction.amount}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <div class="pagination-controls">
+                    <span th:if="${currentPage > 0}">
+                        <a th:href="@{/transactions(page=${currentPage - 1}, size=10, tranId=${tranId})}">
+                            <i class="material-icons">chevron_left</i>
+                            Previous
+                        </a>
+                    </span>
+                    <span th:text="${currentPage + 1} + ' of ' + ${totalPages}"></span>
+                    <span th:if="${currentPage < totalPages - 1}">
+                        <a th:href="@{/transactions(page=${currentPage + 1}, size=10, tranId=${tranId})}">
+                            Next
+                            <i class="material-icons">chevron_right</i>
+                        </a>
+                    </span>
+                </div>
+            </div>
+
+            <div th:if="${errorMessage}" class="error-message">
+                <i class="material-icons">error</i>
+                <span th:text="${errorMessage}"></span>
+            </div>
+
+            <div class="quick-actions">
+                <a th:href="@{/transactions/add}">
+                    <i class="material-icons">add</i>
+                    Add Transaction
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

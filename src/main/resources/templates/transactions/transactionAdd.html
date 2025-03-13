@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Transaction</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            margin: 0;
+            background: #f5f5f5;
+            color: #424242;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 32px auto;
+            padding: 0 16px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-top: 24px;
+        }
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        h1 {
+            color: #1a237e;
+            margin: 0;
+            font-weight: 500;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            color: #616161;
+            font-size: 0.9em;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .data-id {
+            font-weight: 500;
+            color: #1a237e;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .input-field {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #616161;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #3949ab;
+            box-shadow: 0 0 0 2px rgba(57,73,171,0.2);
+        }
+        .input-hint {
+            font-size: 0.8em;
+            color: #757575;
+            margin-top: 4px;
+        }
+        .button-group {
+            margin-top: 24px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #3949ab;
+            color: white;
+        }
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #424242;
+        }
+        .btn-danger {
+            background: #d32f2f;
+            color: white;
+        }
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .error-message {
+            background: #ffebee;
+            color: #d32f2f;
+            padding: 16px;
+            border-radius: 4px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .account-options {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .account-options span {
+            color: #757575;
+        }
+    </style>
+    <script>
+        function copyLastTransaction() {
+            fetch('/api/last')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('cardNumber').value = data.cardNumber || '';
+                    document.getElementById('typeCode').value = data.typeCode || '';
+                    document.getElementById('categoryCode').value = data.categoryCode || '';
+                    document.getElementById('source').value = data.source || '';
+                    document.getElementById('description').value = data.description || '';
+                    document.getElementById('amount').value = data.amount || '';
+                    document.getElementById('originalTimestamp').value = data.originalTimestamp ? data.originalTimestamp.substring(0, 10) : '';
+                    document.getElementById('processedTimestamp').value = data.processedTimestamp ? data.processedTimestamp.substring(0, 10) : '';
+                    document.getElementById('merchantId').value = data.merchantId || '';
+                    document.getElementById('merchantName').value = data.merchantName || '';
+                    document.getElementById('merchantCity').value = data.merchantCity || '';
+                    document.getElementById('merchantZip').value = data.merchantZip || '';
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                    alert('Could not fetch the last transaction.');
+                });
+        }
+
+        function clearForm() {
+            document.getElementById('cardNumber').value = '';
+            document.getElementById('cardNumber2').value = '';
+            document.getElementById('typeCode').value = '';
+            document.getElementById('categoryCode').value = '';
+            document.getElementById('source').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('amount').value = '';
+            document.getElementById('originalTimestamp').value = '';
+            document.getElementById('processedTimestamp').value = '';
+            document.getElementById('merchantId').value = '';
+            document.getElementById('merchantName').value = '';
+            document.getElementById('merchantCity').value = '';
+            document.getElementById('merchantZip').value = '';
+            document.getElementsByName('confirm')[0].value = '';
+        }
+
+        function goBack() {
+            window.location.href = '/transactions';
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div>
+                <span class="data-id" th:text="'Prog: ' + ${programName}"></span>
+                <span th:text="'Date: ' + ${currentDate}"></span>
+                <span th:text="'Time: ' + ${currentTime}"></span>
+            </div>
+            <div>
+                <span class="data-id" th:text="'Tran: ' + ${transactionName}"></span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header-section">
+                <h1>Add New Transaction</h1>
+            </div>
+
+            <form th:action="@{/transactions/add}" th:object="${transaction}" method="post">
+                <div class="account-options">
+                    <div class="input-field" style="flex: 1;">
+                        <label>Enter Account #</label>
+                        <input type="text" th:field="*{cardNumber}" id="cardNumber">
+                    </div>
+                    <span>or</span>
+                    <div class="input-field" style="flex: 1;">
+                        <label>Card #</label>
+                        <input type="text" th:field="*{cardNumber}" id="cardNumber2">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="input-field">
+                        <label>Type Code</label>
+                        <input type="text" th:field="*{typeCode}" id="typeCode">
+                    </div>
+
+                    <div class="input-field">
+                        <label>Category Code</label>
+                        <input type="text" th:field="*{categoryCode}" id="categoryCode">
+                    </div>
+
+                    <div class="input-field">
+                        <label>Source</label>
+                        <input type="text" th:field="*{source}" id="source">
+                    </div>
+
+                    <div class="input-field">
+                        <label>Description</label>
+                        <input type="text" th:field="*{description}" id="description">
+                    </div>
+
+                    <div class="input-field">
+                        <label>Amount</label>
+                        <input type="text" th:field="*{amount}" id="amount">
+                        <div class="input-hint">(-99999999.99)</div>
+                    </div>
+
+                    <div class="input-field">
+                        <label>Original Date</label>
+                        <input type="text" th:field="*{originalTimestamp}" 
+                               placeholder="YYYY-MM-DD" id="originalTimestamp">
+                        <div class="input-hint">(YYYY-MM-DD)</div>
+                    </div>
+
+                    <div class="input-field">
+                        <label>Processed Date</label>
+                        <input type="text" th:field="*{processedTimestamp}" 
+                               placeholder="YYYY-MM-DD" id="processedTimestamp">
+                        <div class="input-hint">(YYYY-MM-DD)</div>
+                    </div>
+
+                    <div class="input-field">
+                        <label>Merchant ID</label>
+                        <input type="text" th:field="*{merchantId}" id="merchantId">
+                    </div>
+
+                    <div class="input-field">
+                        <label>Merchant Name</label>
+                        <input type="text" th:field="*{merchantName}" id="merchantName">
+                    </div>
+
+                    <div class="input-field">
+                        <label>Merchant City</label>
+                        <input type="text" th:field="*{merchantCity}" id="merchantCity">
+                    </div>
+
+                    <div class="input-field">
+                        <label>Merchant Zip</label>
+                        <input type="text" th:field="*{merchantZip}" id="merchantZip">
+                    </div>
+                </div>
+
+                <div class="input-field">
+                    <label>Confirmation</label>
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                        <input type="text" name="confirm" placeholder="Enter Y/N">
+                        <div class="input-hint">(Confirm with Y/N)</div>
+                    </div>
+                </div>
+
+                <div th:if="${errorMessage}" class="error-message">
+                    <i class="material-icons">error</i>
+                    <span th:text="${errorMessage}"></span>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="material-icons">add</i>
+                        Add Transaction
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">
+                        <i class="material-icons">arrow_back</i>
+                        Back
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                        <i class="material-icons">clear</i>
+                        Clear
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="copyLastTransaction()">
+                        <i class="material-icons">content_copy</i>
+                        Copy Last Transaction
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

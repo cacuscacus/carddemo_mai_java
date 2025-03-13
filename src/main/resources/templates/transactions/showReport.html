@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Transaction Report</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            margin: 0;
+            background: white;
+            color: #424242;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 32px auto;
+            padding: 0 16px;
+        }
+        .card {
+            background: white;
+            padding: 24px;
+            margin-top: 24px;
+        }
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        h1 {
+            color: #1a237e;
+            margin: 0;
+            font-weight: 500;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            color: #616161;
+            font-size: 0.9em;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .data-id {
+            font-weight: 500;
+            color: #1a237e;
+        }
+        .button-group {
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            text-decoration: none;
+        }
+        .btn-primary {
+            background: #3949ab;
+            color: white;
+        }
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #424242;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .data-table th {
+            background: #f8f9fa;
+            color: #616161;
+            font-weight: 500;
+        }
+        @media print {
+            .button-group { display: none; }
+            body { font-size: 12pt; }
+            .card { box-shadow: none; padding: 0; }
+            .data-table th { background: #fff; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="status-bar">
+            <div>
+                <span class="data-id" th:text="'Prog: ' + ${programName}"></span>
+                <span th:text="'Date: ' + ${currentDate}"></span>
+                <span th:text="'Time: ' + ${currentTime}"></span>
+            </div>
+            <div>
+                <span class="data-id" th:text="'Tran: ' + ${transactionName}"></span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="header-section">
+                <h1>Transaction Report</h1>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="window.print()">
+                    <i class="material-icons">print</i>
+                    Print
+                </button>
+                <a th:href="@{/transactions/report}" class="btn btn-secondary">
+                    <i class="material-icons">arrow_back</i>
+                    Back
+                </a>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="transaction : ${transactions}">
+                        <td th:text="${transaction.id}"></td>
+                        <td th:text="${#temporals.format(transaction.originalTimestamp, 'MM/dd/yy')}"></td>
+                        <td th:text="${transaction.description}"></td>
+                        <td th:text="${transaction.amount}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
