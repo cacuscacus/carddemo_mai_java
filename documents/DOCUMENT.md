@@ -389,7 +389,7 @@ This modernization excercise example on transforming the AWS COBOL Card Demo int
 
 ## Tools used and recommendations:
 
-- VSCode IDE with Java, Mermaid, Markdown, Drawio and RooCode extensions
+- VSCode IDE with Java, Mermaid, Markdown, Draw.io and RooCode extensions
 - Github Copilot, Codeium, Google's AIStudio with Gemini 2.0 Pro for analyzing files with huge context requirements
 - Perplexity DeepResearch for researching on COBOL and the legacy stack in general
 - PasteMax tool for generating context prompts.
