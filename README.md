@@ -65,5 +65,23 @@ java_implementation/
 java -jar carddemo-{version}.jar
 ```
 
+# Application views
+
+## Transactions list
+`http://localhost:8080/transactions`
+![alt text](image.png)
+
+## Add transaction
+`http://localhost:8080/transactions/add`
+![alt text](image-1.png)
+
+## View transaction
+`http://localhost:8080/transactions/{id}`
+![alt text](image-2.png)
+
+## Transactions report
+`http://localhost:8080/transactions/report`
+![alt text](image-3.png)
+
 ## License
 TBD
