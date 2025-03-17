@@ -17,6 +17,7 @@ public class HomeController {
             <h3>Available Endpoints:</h3>
             <ul>
                 <li><a href="/transactions">List all transactions</a></li>
+                <li><a href="/transactions/report">Transactions report</a></li>
             </ul>
             """;
     }
