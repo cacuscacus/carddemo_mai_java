@@ -395,7 +395,7 @@ This modernization excercise example on transforming the AWS COBOL Card Demo int
 - PasteMax tool for generating context prompts.
 - LLMs involved for code suggestions: DeepSeek R1/v3, Qwen QwQ 32b, Anthropic Claude 3.7, OpenAI o3-mini, Grok, Gemini 2.0 Pro.
 - RooCode to implement changes/applying diffs using Gemini 2.0 flash models.
-- For grammar and overall writing checks: Qwen QwQ 32b, DeepSeek R1, o3-mini.
+- For grammar and overall writing checks: Grok, Qwen QwQ 32b, DeepSeek R1, o3-mini.
 
 ---
 
