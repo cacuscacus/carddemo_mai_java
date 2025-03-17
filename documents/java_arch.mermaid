@@ -1,0 +1,13 @@
+graph TD
+    A[User Browser] -->|HTTP Requests| B[Spring Boot Application]
+    B --> C[Controller Layer]
+    C --> D[Service Layer]
+    D --> E[Repository Layer]
+    E --> F[Database 
+            H2/AWS Aurora]
+    B --> G[Thymeleaf Templates]
+    G -->|HTML Rendering| A
+    B --> H[REST API Endpoints]
+    H -->|JSON Responses| A
+    I[Configuration
+        application.properties] --> B

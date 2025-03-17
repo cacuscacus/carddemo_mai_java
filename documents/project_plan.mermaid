@@ -1,0 +1,35 @@
+gantt
+    dateFormat  YYYY-MM-DD
+    axisFormat  %b
+    title CardDemo Migration Project - Gantt Chart
+
+    section Phase 1: <br>Assessment &<br> Planning
+    Requirements Gathering          :a1, 2025-03-01, 2w
+    Microservice Design             :a2, after a1, 1w
+    Technology Stack Selection      :a3, after a1, 1w
+    Data Migration Strategy         :a4, after a2, 2w
+    Project Planning & Tooling      :a5, after a3, 2w
+
+    section Phase 2: User Authentication
+    User Service Development        :b1, after a5, 2w
+    UI Development (Login)          :b2, after a5, 2w
+    Data Migration (Users)          :b3, after b2, 2w
+
+    section Phase 3: Core User Functionality
+    Account Microservice           :c1, after b2, 2w
+    Transaction Microservice         :c2, after b3, 3w
+    Credit Card Microservice        :c3, after c1, 4w
+    Reporting Microservice        :c4, after c2, 4w
+    UI Development (Core)          :c5, after c3, 6w
+    Data Migration (Core)           :c6, after c4, 4w
+
+    section Phase 4: Admin Functionality
+    Admin Microservice              :d1, after c5, 4w
+    UI Development (Admin)           :d2, after c6, 4w
+
+    section Phase 5: Testing & Deployment
+    System Testing                 :e1, after d1, 2w
+    UAT                            :e2, after e1, 2w
+    PROD Deployment                     :e3, after e2, 1w
+    Cutover                        :e4, after e3, 1w
+    Post-Implementation Review     :e5, after e4, 1w

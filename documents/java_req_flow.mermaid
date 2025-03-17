@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant U as User
+    participant C as Controller<br>(TransactionController)
+    participant S as Service<br>(TransactionService)
+    participant R as Repository<br>(TransactionRepository)
+    participant D as Database
+    participant T as Thymeleaf Template
+
+    U->>C: GET /transactions
+    C->>S: searchTransactions(tranId, pageable)
+    S->>R: findByTransactionIdContaining()
+    R->>D: Query Transactions
+    D-->>R: Transaction Data
+    R-->>S: Page<Transaction>
+    S-->>C: Page<Transaction>
+    C->>T: Render transactionList.html
+    T-->>C: HTML Content
+    C-->>U: Display Transaction List

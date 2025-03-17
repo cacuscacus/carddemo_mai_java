@@ -1,0 +1,55 @@
+classDiagram
+    namespace com.example.carddemo {
+        class CardDemoApplication {
+            +main(args: String[])
+        }
+        class com.example.carddemo.controller.HomeController {
+            +home(): String
+        }
+        class com.example.carddemo.controller.TransactionController {
+            +listTransactions()
+            +viewTransaction()
+            +showAddTransactionForm()
+            +addTransaction()
+            +updateTransaction()
+            +showTransactionReportForm()
+            +showReport()
+            +createTransaction()
+            +getAllTransactionsApi()
+            +getTransaction()
+            +updateTransaction()
+            +deleteTransaction()
+            +getLastTransaction()
+        }
+        class com.example.carddemo.service.TransactionService {
+            +getTransactionById()
+            +getAllTransactions()
+            +searchTransactions()
+            +createTransaction()
+            +updateTransaction()
+            +deleteTransaction()
+            +getTransactionsByDateRange()
+        }
+        class com.example.carddemo.repository.TransactionRepository {
+            +findById()
+            +findAll()
+            +findByTransactionIdContaining()
+            +findByOriginalTimestampBetween()
+            +save()
+            +deleteById()
+        }
+        class com.example.carddemo.model.Transaction {
+            -id: String
+            -cardNumber: String
+            -typeCode: String
+            -amount: BigDecimal
+            -originalTimestamp: LocalDateTime
+            ...
+        }
+    }
+
+    CardDemoApplication --> com.example.carddemo.controller.TransactionController
+    com.example.carddemo.controller.TransactionController --> com.example.carddemo.service.TransactionService
+    com.example.carddemo.service.TransactionService --> com.example.carddemo.repository.TransactionRepository
+    com.example.carddemo.repository.TransactionRepository --> com.example.carddemo.model.Transaction
+    com.example.carddemo.controller.TransactionController --> com.example.carddemo.controller.HomeController : Routes
